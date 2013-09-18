@@ -14,7 +14,7 @@
     -r, --root <path>           set root folder to search from
     --depth <num>               number of directories to search in (default: $DEPTH)
     -V, --version               output program version
-    --update                    update browser-updater to latest version 
+    --update                    update fa to latest version 
     -h, --help                  output help information
 
 ```
