@@ -8,6 +8,7 @@ QUERY=""
 EXEC=""
 DEPTH=3
 LIST=0
+INTERACTIVE=0
 APP=$0
 RESULTS=""
 
@@ -58,17 +59,28 @@ run() {
     return
   fi
 
+  if [ "$INTERACTIVE" = 1 ]; then
+    unset i
+    for i in "${!RESULTS[@]}"; do
+      echo "$i) ${RESULTS[$i]}"
+    done
+    read -p "Which result: " index
+    result=${RESULTS[$index]}
+  else
+    result=${RESULTS[0]}
+  fi
+
   if [ -n "$EXEC" ]; then
-    eval "$EXEC ${RESULTS[0]}"
+    eval "$EXEC $result"
     return
   fi
 
   case $TYPE in
     d)
-      pushd ${RESULTS[0]}
+      pushd $result
       ;;
     f)
-      echo ${RESULTS[0]}
+      echo $result
       ;;
   esac
 }
@@ -105,6 +117,9 @@ while test $# -ne 0; do
       ;;
     -l|--ls)
       LIST=1
+      ;;
+    -i|--interactive)
+      INTERACTIVE=1
       ;;
     -e|--exec)
       EXEC=$1
