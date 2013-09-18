@@ -28,3 +28,9 @@ Single line install:
 ```
 (mkdir /tmp/fa && cd /tmp/fa && curl -L# https://github.com/firstandthird/fa/archive/master.tar.gz | tar zx --strip 1 && make install)
 ```
+
+After installation, add this to your .bash_profile or .bashrc:
+
+```
+eval "$(fa --init)"
+```
