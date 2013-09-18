@@ -25,14 +25,6 @@ usage() {
 EOF
 }
 
-aliases() {
-  dir=`dirname $0`
-  cmd=`basename $0`
-  cat <<-EOF
-alias fd="$dir/$cmd -d"
-EOF
-}
-
 init() {
   cat <<-EOF
 alias fa=". $APP"
@@ -79,10 +71,6 @@ while test $# -ne 0; do
       ;;
     --init)
       init
-      exit
-      ;;
-    -a|--aliases)
-      aliases
       exit
       ;;
     -r|--root)
