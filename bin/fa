@@ -1,0 +1,112 @@
+#!/bin/bash
+
+VERSION="0.1.0"
+REPO=git://github.com/firstandthird/fa.git
+TYPE=d
+ROOT="."
+QUERY=""
+EXEC=""
+DEPTH=3
+APP=$0
+
+
+usage() {
+  cat <<-EOF
+
+  Usage: fa [options]
+
+  Options:
+
+    -V, --version               output program version
+    --update                    update browser-updater to latest version 
+    -h, --help                  output help information
+
+
+EOF
+}
+
+aliases() {
+  dir=`dirname $0`
+  cmd=`basename $0`
+  cat <<-EOF
+alias fd="$dir/$cmd -d"
+EOF
+}
+
+init() {
+  cat <<-EOF
+alias fa=". $APP"
+alias fd=". $APP -d"
+alias ff=". $APP -f"
+alias fv=". $APP -f -e vim"
+EOF
+}
+
+run() {
+  if [ -z "$QUERY" ]; then
+    echo "Please pass in a search query"
+    exit 1;
+  else
+    results=`find $ROOT -type $TYPE -depth -$DEPTH -name "*$QUERY*" | head -n 1`
+
+    if [ -n "$EXEC" ]; then
+      eval "$EXEC $results"
+      exit 0
+    fi
+
+    case $TYPE in
+      d)
+        pushd $results
+        ;;
+      f)
+        echo $results
+        ;;
+    esac
+  fi
+}
+
+while test $# -ne 0; do
+  arg=$1
+  shift
+  case $arg in
+    -h|--help)
+      usage
+      exit
+      ;;
+    -V|--version)
+      echo $VERSION
+      exit
+      ;;
+    --init)
+      init
+      exit
+      ;;
+    -a|--aliases)
+      aliases
+      exit
+      ;;
+    -r|--root)
+      ROOT=$1
+      shift
+      ;;
+    -d|--dir)
+      TYPE=d
+      ;;
+    -f|--file)
+      TYPE=f
+      ;;
+    --depth)
+      DEPTH=$1
+      shift
+      ;;
+    -e|--exec)
+      EXEC=$1
+      shift
+      ;;
+    *)
+      QUERY=$arg
+      ;;
+  esac
+done
+
+run
