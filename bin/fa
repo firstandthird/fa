@@ -57,6 +57,11 @@ search() {
 run() {
   search
 
+  if [ -z "$RESULTS" ]; then
+    echo "No results"
+    return
+  fi
+
   if [ "$LIST" = 1 ]; then
     unset i
     for i in "${RESULTS[@]}"; do
