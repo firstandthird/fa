@@ -27,7 +27,7 @@ usage() {
     -r, --root <path>           set root folder to search from
     --depth <num>               number of directories to search in (default: $DEPTH)
     -V, --version               output program version
-    --update                    update browser-updater to latest version 
+    --update                    update fa to latest version 
     -h, --help                  output help information
 
 
@@ -41,6 +41,18 @@ alias fd=". $APP -d"
 alias ff=". $APP -f"
 alias fv=". $APP -f -e vim"
 EOF
+}
+
+update() {
+  echo "updating fa(1)"
+  rm -fr /tmp/fa
+  git clone $REPO \
+      --depth 0 \
+      /tmp/fa \
+      &> /tmp/fa.log \
+    && cd /tmp/fa \
+    && make install \
+    && echo "updated $VERSION -> `fa --version`"
 }
 
 search() {
