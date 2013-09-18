@@ -9,6 +9,7 @@ EXEC=""
 DEPTH=3
 LIST=0
 APP=$0
+RESULTS=""
 
 
 usage() {
@@ -35,32 +36,41 @@ alias fv=". $APP -f -e vim"
 EOF
 }
 
-run() {
+search() {
   if [ -z "$QUERY" ]; then
     echo "Please pass in a search query"
-    exit 1;
   else
-    if [ "$LIST" = 1 ];then
-      find $ROOT -type $TYPE -depth -$DEPTH -name "*$QUERY*" 
-      return
-    else
-      results=`find $ROOT -type $TYPE -depth -$DEPTH -name "*$QUERY*" | head -n 1`
-    fi
-
-    if [ -n "$EXEC" ]; then
-      eval "$EXEC $results"
-      return
-    fi
-
-    case $TYPE in
-      d)
-        pushd $results
-        ;;
-      f)
-        echo $results
-        ;;
-    esac
+    unset i RESULTS
+    while IFS= read -r -d $'\0' file; do
+      RESULTS[i++]="$file"
+    done < <(find $ROOT -type $TYPE -depth -$DEPTH -name "*$QUERY*" -print0)
   fi
+}
+
+run() {
+  search
+
+  if [ "$LIST" = 1 ]; then
+    unset i
+    for i in "${RESULTS[@]}"; do
+      echo $i
+    done
+    return
+  fi
+
+  if [ -n "$EXEC" ]; then
+    eval "$EXEC ${RESULTS[0]}"
+    return
+  fi
+
+  case $TYPE in
+    d)
+      pushd ${RESULTS[0]}
+      ;;
+    f)
+      echo ${RESULTS[0]}
+      ;;
+  esac
 }
 
 while test $# -ne 0; do
