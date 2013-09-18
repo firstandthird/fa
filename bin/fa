@@ -102,11 +102,11 @@ while test $# -ne 0; do
   case $arg in
     -h|--help)
       usage
-      exit
+      return
       ;;
     -V|--version)
       echo $VERSION
-      exit
+      return
       ;;
     --init)
       init
