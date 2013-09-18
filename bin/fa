@@ -7,6 +7,7 @@ ROOT="."
 QUERY=""
 EXEC=""
 DEPTH=3
+LIST=0
 APP=$0
 
 
@@ -39,11 +40,16 @@ run() {
     echo "Please pass in a search query"
     exit 1;
   else
-    results=`find $ROOT -type $TYPE -depth -$DEPTH -name "*$QUERY*" | head -n 1`
+    if [ "$LIST" = 1 ];then
+      find $ROOT -type $TYPE -depth -$DEPTH -name "*$QUERY*" 
+      return
+    else
+      results=`find $ROOT -type $TYPE -depth -$DEPTH -name "*$QUERY*" | head -n 1`
+    fi
 
     if [ -n "$EXEC" ]; then
       eval "$EXEC $results"
-      exit 0
+      return
     fi
 
     case $TYPE in
@@ -86,6 +92,9 @@ while test $# -ne 0; do
     --depth)
       DEPTH=$1
       shift
+      ;;
+    -l|--ls)
+      LIST=1
       ;;
     -e|--exec)
       EXEC=$1
