@@ -12,6 +12,7 @@ INTERACTIVE=0
 APP=$0
 VERBOSE=0
 RESULTS=""
+RESULT_COUNT=0
 
 
 usage() {
@@ -64,6 +65,7 @@ search() {
       RESULTS[i++]="$file"
       log "RESULT $i: $file"
     done < <(find $ROOT -maxdepth $DEPTH -type $TYPE -name "*$QUERY*" -print0)
+    RESULT_COUNT=$i
   fi
 }
 
@@ -83,16 +85,16 @@ run() {
     return
   fi
 
-  if [ "$INTERACTIVE" = 1 ]; then
+  if [ "$INTERACTIVE" = 1 ] && [ "$RESULT_COUNT" -gt 1 ]; then
     unset i
     for i in "${!RESULTS[@]}"; do
       echo "$i) ${RESULTS[$i]}"
     done
     read -p "Which result: " index
-    result=${RESULTS[$index]}
   else
-    result=${RESULTS[0]}
+    index=0
   fi
+  result=${RESULTS[$index]}
 
   if [ -n "$EXEC" ]; then
     eval "$EXEC $result"
