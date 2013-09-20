@@ -158,4 +158,7 @@ while test $# -ne 0; do
   esac
 done
 
+if [ -n "$FA_INTERACTIVE" ]; then
+  INTERACTIVE="$FA_INTERACTIVE"
+fi
 run
