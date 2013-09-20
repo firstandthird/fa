@@ -10,6 +10,7 @@ DEPTH=3
 LIST=0
 INTERACTIVE=0
 APP=$0
+VERBOSE=0
 RESULTS=""
 
 
@@ -26,6 +27,7 @@ usage() {
     -e, --exec                  pass in result into app (ex: vim)
     -r, --root <path>           set root folder to search from
     --depth <num>               number of directories to search in (default: $DEPTH)
+    -v, --verbose               verbose output
     -V, --version               output program version
     --update                    update browser-updater to latest version 
     -h, --help                  output help information
@@ -43,13 +45,24 @@ alias fv=". $APP -f -e vim"
 EOF
 }
 
+log() {
+  if [ "$VERBOSE" = 1 ]; then
+    echo $1
+  fi
+}
+
 search() {
+  log "ROOT: $ROOT"
+  log "TYPE: $TYPE"
+  log "DEPTH: $DEPTH"
+  log "QUERY: $QUERY"
   if [ -z "$QUERY" ]; then
     echo "Please pass in a search query"
   else
     unset i RESULTS
-    while IFS= read -r -d $'\0' file; do
+    while read -d $'\0' file; do
       RESULTS[i++]="$file"
+      log "RESULT $i: $file"
     done < <(find $ROOT -type $TYPE -depth -$DEPTH -name "*$QUERY*" -print0)
   fi
 }
@@ -135,6 +148,9 @@ while test $# -ne 0; do
     -e|--exec)
       EXEC=$1
       shift
+      ;;
+    -v|--verbose)
+      VERBOSE=1
       ;;
     *)
       QUERY=$arg
