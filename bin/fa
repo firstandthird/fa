@@ -6,7 +6,7 @@ TYPE=d
 ROOT="."
 QUERY=""
 EXEC=""
-DEPTH=3
+DEPTH=2
 LIST=0
 INTERACTIVE=0
 APP=$0
@@ -63,7 +63,7 @@ search() {
     while read -d $'\0' file; do
       RESULTS[i++]="$file"
       log "RESULT $i: $file"
-    done < <(find $ROOT -type $TYPE -depth -$DEPTH -name "*$QUERY*" -print0)
+    done < <(find $ROOT -maxdepth $DEPTH -type $TYPE -name "*$QUERY*" -print0)
   fi
 }
 
