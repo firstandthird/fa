@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="0.1.0"
+VERSION="0.1.1"
 REPO=git://github.com/firstandthird/fa.git
 TYPE=d
 ROOT="."

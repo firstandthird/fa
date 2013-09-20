@@ -1,4 +1,14 @@
 
+0.1.1 / 2013-09-19 
+==================
+
+  * fixed merge and added --update
+  * added init instructions #1
+  * --update option. fixes #2
+  * updated readme #1
+  * instructions for installation #1
+  * added makefile.  fixes #5
+
 0.1.0 / 2013-09-19 
 ==================
 
