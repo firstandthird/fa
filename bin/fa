@@ -50,6 +50,7 @@ log() {
   if [ "$VERBOSE" = 1 ]; then
     echo $1
   fi
+}
 
 update() {
   echo "updating fa(1)"
@@ -164,6 +165,10 @@ while test $# -ne 0; do
       ;;
     -v|--verbose)
       VERBOSE=1
+      ;;
+    --update)
+      update
+      return
       ;;
     *)
       QUERY=$arg
