@@ -30,7 +30,7 @@ usage() {
     --depth <num>               number of directories to search in (default: $DEPTH)
     -v, --verbose               verbose output
     -V, --version               output program version
-    --update                    update browser-updater to latest version 
+    --update                    update fa to latest version 
     -h, --help                  output help information
 
 
@@ -50,6 +50,17 @@ log() {
   if [ "$VERBOSE" = 1 ]; then
     echo $1
   fi
+
+update() {
+  echo "updating fa(1)"
+  rm -fr /tmp/fa
+  git clone $REPO \
+      --depth 0 \
+      /tmp/fa \
+      &> /tmp/fa.log \
+    && cd /tmp/fa \
+    && make install \
+    && echo "updated $VERSION -> `fa --version`"
 }
 
 search() {
